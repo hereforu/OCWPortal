@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<!--
+	Multiverse by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Video Player</title>
+		<meta charset="utf-8" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+
+
+		{% load staticfiles %}
+		<link rel="stylesheet" href="{% static "main/assets/font-awesome/css/font-awesome.min.css" %}">
+		<link href="{% static "boostrap/css/bootstrap.min.css" %}" rel="stylesheet">
+		<link href="{% static "boostrap/css/bootstrap-treeview.min.css" %}" rel="stylesheet">
+		<link rel="stylesheet" href="{% static "search_result_page_assets/css/main.css" %}"/>
+		<link rel="stylesheet" href="{% static "mediaelement/build/mediaelementplayer.min.css" %}"/>
+
+	</head>
+	<body>
+
+		<!--div class = "row row-horizon">
+			{% for relates_clip in related_clips %}
+				<div class = "col-sm-6 col-sm-3">
+					<div class = "thumbnail">
+						<a href="#" onclick="return setvideo('{{relates_clip.media_url}}', '{{relates_clip.video_type}}', '{{relates_clip.caption_url}}', {{relates_clip.start_time}})">
+							<img src = "{{relates_clip.thumbnail_url}}" alt = "Generic placeholder thumbnail">
+						</a>
+					</div>
+					<div>
+						<p  style="Text-overflow:ellipsis;overflow:hidden; white-space:nowrap; text-transform:capitalize;">{{relates_clip.chapterRef.ctitle}}</p>
+					</div>
+				</div>
+			{% endfor %}
+		</div-->
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+							<a href="#" onclick="history.back();" style="text-decoration:none;border:none; !important"><i class="fa fa-arrow-circle-up fa-4x"></i></a>
+					</header>
+
+				<!-- Main -->
+
+
+
+
+					<div class="container">
+						<div class="row">
+							<h1>{{clip.description}}</h1>							
+						</div>
+						{% if clip %}
+							<video width="100%" id="player1" controls="controls" autoplay="true" class="center-block">
+								<source type="{{clip.video_type}}" src="{{clip.media_url}}" />
+								{% if clip.caption_url %}
+									<track kind="subtitles" src="{{clip.caption_url}}" srclang="ko" default/>
+								{% endif %}
+							</video>
+						{% else %}
+							<p>no video</p>
+						{% endif %}
+					</div>
+					<div class="container">
+
+					</div>
+
+						<!-- Footer -->
+						<footer>
+							<div class="row">
+								<div class="col-lg-12">
+									<p>Copyright &copy; Sogang OCW Portal</p>
+								</div>
+							</div>
+						</footer>
+					</div>
+			</div>
+
+
+		<!--div class="presentation-container">
+		{% if clip %}
+			<video width="100%" id="player1" controls="controls" autoplay="true" class="center-block">
+				<source type="{{clip.video_type}}" src="{{clip.media_url}}" />
+				{% if clip.caption_url %}
+					<track kind="subtitles" src="{{clip.caption_url}}" srclang="ko" default/>
+				{% endif %}
+			</video>
+		{% else %}
+			<p>no video</p>
+		{% endif %}
+	</div>
+	<div class="container">
+		<a href="#" onclick="history.back();" style="text-decoration:none !important"><i class="fa fa-arrow-circle-up fa-4x"></i></a>
+	</div>
+
+	<footer>
+		<div class="row">
+			<div class="col-lg-12">
+				<p>Copyright &copy; Sogang OCW Portal</p>
+			</div>
+		</div>
+	</footer-->
+	<script src="{% static "mediaelement/build/jquery.js" %}"></script>
+	<script src="{% static "mediaelement/build/mediaelement-and-player.min.js" %}"></script>
+	<script src="{% static "boostrap/js/bootstrap.min.js" %}"></script>
+	<script src="{% static "search_result_page_assets/js/skel.min.js" %}"></script>
+	<script src="{% static "search_result_page_assets/js/util.js" %}"></script>
+	<script src="{% static "search_result_page_assets/js/main.js" %}"></script>
+	<script src="{% static "boostrap/js/bootstrap.min.js" %}"></script>
+		<script>
+			var g_player;
+			$('video').mediaelementplayer({
+				// if the <video width> is not specified, this is the default
+				defaultVideoWidth: 600,
+				// if the <video height> is not specified, this is the default
+				defaultVideoHeight: 380,
+				// if set, overrides <video width>
+				videoWidth: -1,
+				// if set, overrides <video height>
+				videoHeight: -1,
+				// width of audio player
+
+				// enables Flash and Silverlight to resize to content size
+				enableAutosize: true,
+				// the order of controls you want on the control bar (and other plugins below)
+				features: ['playpause','progress','current','duration','tracks','volume'],
+				// Hide controls when playing and mouse is not over the video
+				alwaysShowControls: false,
+				// force iPad's native controls
+				iPadUseNativeControls: false,
+				// force iPhone's native controls
+				iPhoneUseNativeControls: false,
+				// force Android's native controls
+				AndroidUseNativeControls: false,
+				// forces the hour marker (##:00:00)
+				alwaysShowHours: false,
+				// show framecount in timecode (##:00:00:00)
+				showTimecodeFrameCount: false,
+				// used when showTimecodeFrameCount is set to true
+				pauseOtherPlayers: true,
+				// array of keyboard commands
+				startLanguage:'ko',
+				enableKeyboard: true,
+				keyActions: [],
+				success: function(player, node) {
+					g_player = player;
+					$('.mejs-overlay-button').trigger('click');
+					player.setCurrentTime({{clip.start_time}});
+				}
+			});
+
+			function setvideo(media_url, video_type, caption_url, current_time)
+			{
+				alert(media_url);
+				g_player.pause();
+
+			//	var source = [{src:"https://youtu.be/eOrNdBpGMv8", type:'video/youtube'}];
+				g_player.setSrc(media_url);
+
+				g_player.load();
+			//	g_player.setCurrentTime(current_time);
+				g_player.play();
+				return false;
+			}
+
+		</script>
+
+
+
+	</body>
+</html>

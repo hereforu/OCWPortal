@@ -1,0 +1,86 @@
+{
+    "Lecture": [
+                {
+                  "subject": "Middle School Math",
+                  "description": "Try playing algebra tic-tac-toe, calculating the heights of buildings using shadow ratios, or playing graphing Battleship to practice the concept of ordered pairs",
+                  "category": "Mathematics",
+                  "subcategory": "First",
+                  "level": "middle",
+                  "image_url": "/media/slide_images/math_middle.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "High School Math",
+                  "description": "Focus on higher math—including algebra I, geometry, algebra II, trigonometry, and pre-calculus",
+                  "category": "Mathematics",
+                  "subcategory": "First",
+                  "level": "high",
+                  "image_url": "/media/slide_images/math_high.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "Elementary School Math",
+                  "description": "The most basic topics in elementary mathematics are arithmetic and geometry",
+                  "category": "Mathematics",
+                  "subcategory": "Second",
+                  "level": "elementary",
+                  "image_url": "/media/slide_images/math_elem.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "Middle School Science",
+                  "description": "Try playing algebra tic-tac-toe, calculating the heights of buildings using shadow ratios, or playing graphing Battleship to practice the concept of ordered pairs",
+                  "category": "Science",
+                  "subcategory": "First",
+                  "level": "middle",
+                  "image_url": "/media/slide_images/science_middle.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "High School Science",
+                  "description": "Focus on higher math—including algebra I, geometry, algebra II, trigonometry, and pre-calculus",
+                  "category": "Science",
+                  "subcategory": "First",
+                  "level": "high",
+                  "image_url": "/media/slide_images/science_high.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "Elementary School Science",
+                  "description": "The most basic topics in elementary mathematics are arithmetic and geometry",
+                  "category": "Science",
+                  "subcategory": "Second",
+                  "level": "elementary",
+                  "image_url": "/media/slide_images/science_elem.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "Estern Philosophy",
+                  "description": "the various philosophies of South and East Asia, including Chinese philosophy, Indian philosophy, Korean philosophy, and Japanese philosophy",
+                  "category": "Humanities",
+                  "subcategory": "Philosophy",
+                  "level": "graduate",
+                  "image_url": "/media/slide_images/philosophy.jpg",
+                    "chapters": [
+                    ]
+                },
+                {
+                  "subject": "English Writing",
+                  "description": "The most basic topics in elementary mathematics are arithmetic and geometry",
+                  "category": "Humanities",
+                  "subcategory": "Writing",
+                  "level": "graduate",
+                  "image_url": "/media/slide_images/writing.jpg",
+                    "chapters": [
+                    ]
+                }
+
+
+            ]
+        }

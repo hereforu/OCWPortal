@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<!--
+	Multiverse by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Lecture Tree</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		{% load staticfiles %}
+		<link href="{% static "main/assets/bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+		<link href="{% static "main/assets/bootstrap/css/bootstrap-treeview.min.css" %}" rel="stylesheet">
+		<link href="{% static "main/assets/css/main.css" %}" rel="stylesheet" >		
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+							<h1>{{lecture.subject}}</h1>
+
+
+					</header>
+
+				<!-- Main -->
+
+
+
+
+					<div class="container">
+						<div class="row">
+							<h1>{{lecture.subject}}</h1>
+							<p>{{lecture.description}}</p>
+						</div>
+
+							<div class="pre-scrollable col-sm-6" id="tree" style="font-size:10px;" ></div>
+							<div class="col-sm-6">
+								<div id="player"></div>
+								<div id="sameclips" class="progress">
+
+								</div>
+						  </div>
+
+						<!-- Footer -->
+
+					</div>
+			</div>
+		<!-- Scripts -->
+			<script src="{% static "main/assets/js/jquery-1.11.1.min.js" %}"></script>
+			<script src="{% static "main/assets/js/skel.min.js" %}"></script>
+			<script src="{% static "main/assets/js/util.js" %}"></script>
+			<script src="{% static "main/assets/js/main.js" %}"></script>
+			<script src="{% static "main/assets/bootstrap/js/bootstrap.min.js" %}"></script>
+			<script src="{% static "main/assets/bootstrap/js/bootstrap-treeview.min.js" %}"></script>
+
+
+
+
+			<script>
+
+				$(document).ready(function(){
+					$('[data-toggle="tooltip"]').tooltip();
+				});
+
+				var tag = document.createElement('script');
+				tag.src = "https://www.youtube.com/iframe_api";
+				var firstScriptTag = document.getElementsByTagName('script')[0];
+				firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+				var player;
+				function onYouTubeIframeAPIReady() {
+					player = new YT.Player('player', {
+						height: '300',
+						width: '540',
+						{% if requested_clip %}
+							videoId: '{{requested_clip.0.youtube_id}}',
+						{% else %}
+							videoId: 'SESuctdE9vM',
+						{% endif %}
+
+						events: {
+							'onReady': onPlayerReady,
+							'onStateChange': onPlayerStateChange
+						}
+					});
+				}
+				function onPlayerReady(event) {
+					event.target.playVideo();
+				}
+				var done = false;
+				function onPlayerStateChange(event) {
+					if (event.data == YT.PlayerState.PLAYING && !done) {
+					//	setTimeout(stopVideo, 6000);
+						{% if requested_clip %}
+							player.seekTo({{requested_clip.0.start_time}}, true);
+							var videoinfo = {
+								videoId: "{{requested_clip.0.youtube_id}}",
+								startSeconds: {{requested_clip.0.start_time}},
+								endSeconds: {{requested_clip.0.end_time}},
+								suggestedQuality: "large",
+								desc: "{{requested_clip.0.description}}"
+							};
+							makeMediaBar(videoinfo);
+						{% endif %}
+						done = true;
+					}
+				}
+				function stopVideo() {
+					player.stopVideo();
+				}
+
+				var allmedias = enum_medias();
+				function enum_medias()
+				{
+					var medias = [
+						{% for clip in clips_by_youtubeid %}
+								{videoId:"{{clip.youtube_id}}", startSeconds:{{clip.start_time}}, endSeconds:{{clip.end_time}}, suggestedQuality:"large", runtime:{{clip.running_time}},  desc:"{{clip.description}}"},
+						{% endfor %}
+					];
+					return medias;
+				}
+
+				var newmedias;
+				function seekto_rearrangeprograssbar(index)
+				{
+					var playingmedia = newmedias[index];
+					player.seekTo(playingmedia.startSeconds, true);
+					makeMediaBar(playingmedia);
+				}
+
+				function makeMediaBar(playingmedia)
+				{
+					newmedias = allmedias.filter(function (item, index, array) {
+						return item.videoId === playingmedia.videoId;
+					});
+
+				  //<a href="#" data-toggle="tooltip" title="Hooray!">
+					var colors = ["progress-bar-success", "progress-bar-info", "progress-bar-warning", "progress-bar-danger"];
+					var newDIV = document.createElement("div");
+					newmedias.forEach( function( item, index ){
+						var progressDIVblock = document.createElement("div");
+						var classname = "progress-bar ";
+						if(item.startSeconds == playingmedia.startSeconds){
+							classname += "progress-bar-striped active";
+						}
+						else {
+							classname += colors[index%4];
+						}
+						progressDIVblock.setAttribute('class', classname);
+						progressDIVblock.setAttribute('role', 'progressbar');
+
+						var width = "width:";
+						width += (item.endSeconds - item.startSeconds)*100/item.runtime;
+						width += "% ";
+						progressDIVblock.setAttribute('style', width);
+
+						if(item.startSeconds == playingmedia.startSeconds){
+							progressDIVblock.innerHTML = "Playing...";
+						}
+						else {
+							var tooltipbloc = document.createElement("a");
+							tooltipbloc.setAttribute('href', 'javascript:;');
+							var functionname = "seekto_rearrangeprograssbar(";
+							functionname += index;
+							functionname += ");";
+							tooltipbloc.setAttribute('onclick', functionname);
+							tooltipbloc.setAttribute('data-toggle', 'tooltip');
+							tooltipbloc.setAttribute('title', item.desc);
+							tooltipbloc.setAttribute('style', 'text-decoration:none !important');// /style="Text-overflow:ellipsis;overflow:hidden; white-space:nowrap; text-transform:capitalize;"
+							tooltipbloc.innerHTML = "<h4>"+item.desc+"</h4>";
+							progressDIVblock.appendChild(tooltipbloc);
+						}
+						newDIV.appendChild(progressDIVblock);
+					});
+
+					var sameclipsDIVblock = document.getElementById("sameclips");
+
+					if(sameclipsDIVblock.hasChildNodes())
+					{
+						sameclipsDIVblock.removeChild(sameclipsDIVblock.childNodes[0]);
+					}
+					sameclipsDIVblock.appendChild(newDIV);
+
+				}
+
+
+				{% if clips %}
+					function getTree() {
+						var tree = [
+							{
+								text: "{{lecture.subject}}",
+								color: "#FFFFFF",
+  							backColor: "#444444",
+								icon: "glyphicon glyphicon-stop",
+								selectedIcon: "glyphicon glyphicon-play",
+								href: "#",
+								nodes:
+								[
+									{% regroup clips by chapterRef.chapter_title as chapter_list %}
+									{% for chapter in chapter_list %}
+									{
+										text:"{{chapter.grouper | capfirst}}",
+										color: "#FFFFFF",
+										backColor: "#444444",
+										selectable: false,
+										href: "#",
+										nodes:
+										[
+											{% regroup chapter.list by sectionRef.section_title as section_list %}
+											{% for section in section_list %}
+											{
+												text:"{{section.grouper  | capfirst}}",
+												color: "#FFFFFF",
+												backColor: "#444444",
+												selectable: false,
+												href: "#",
+												nodes:
+												[
+													{% for clip in section.list %}
+													{
+														text:"{{clip.description | capfirst}} [{{clip.providerRef.name}}, {{clip.instituteRef.name}}]",
+														color: "#FFFFFF",
+														backColor: "#444444",
+														selectable: true,
+														{% if requested_clip %}
+															state: {
+
+																{% if requested_clip.0.id == clip.id %}
+																	selected: true,
+																	expanded: true,
+																{% else %}
+																	selected: false
+																{% endif %}
+															},
+														{% endif %}
+														href: "{{clip.youtube_id}}",
+														tags: ['{{clip.start_time}}', '{{clip.end_time}}' ,'{{clip.running_time}}']
+													},
+													{% endfor %}
+												]
+											},
+											{% endfor %}
+										]
+									},
+									{% endfor %}
+								]
+							},
+						];
+						return tree;
+					}
+					//https://youtu.be/2gCbnwavkKc
+					$('#tree').treeview({
+						data: getTree(), showBorder:false,
+						{% if requested_clip %}
+							levels:4,
+						{% endif %}
+						onNodeSelected: function(event, data) {
+							var videoinfo = {
+								videoId: " ",
+								startSeconds: 0,
+								endSeconds: 0,
+								suggestedQuality: "large",
+								desc: "aaaaaa"
+							};
+							videoinfo.videoId = data.href;
+							videoinfo.startSeconds = parseInt(data.tags[0]);
+							videoinfo.endSeconds = parseInt(data.tags[1]);
+							player.loadVideoById(videoinfo)
+							makeMediaBar(videoinfo);
+					  }
+					});
+
+				{% endif %}
+			</script>
+	</body>
+</html>

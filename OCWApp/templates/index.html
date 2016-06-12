@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sogang OCW Portal</title>
+
+        <!-- CSS -->
+        {% load staticfiles %}
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster">
+        <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css?family=Nanum+Gothic">
+        <link rel="stylesheet" href="{% static "main/assets/bootstrap/css/bootstrap.min.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/font-awesome/css/font-awesome.min.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/css/animate.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/css/magnific-popup.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/flexslider/flexslider.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/css/form-elements.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/css/style.css" %}">
+        <link rel="stylesheet" href="{% static "main/assets/css/media-queries.css" %}">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="{% static "main/assets/ico/favicon.ico" %}">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static "main/assets/ico/apple-touch-icon-144-precomposed.png" %}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static "main/assets/ico/apple-touch-icon-114-precomposed.png" %}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static "main/assets/ico/apple-touch-icon-72-precomposed.png" %}">
+        <link rel="apple-touch-icon-precomposed" href="{% static "main/assets/ico/apple-touch-icon-57-precomposed.png" %}">
+
+    </head>
+
+    <body>
+
+        <!-- Top menu -->
+		<nav class="navbar" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/home/">Andia - a super cool design agency...</a>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="top-navbar-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active">
+							<a href="/home/"><i class="fa fa-home"></i><br>Home</a>
+						</li>
+						<li>
+							<a href="/classes/"><i class="fa fa-book"></i><br>Classes</a>
+						</li>
+					</ul>
+				</div>
+        <div class="col-sm-15" align="left">
+          <form id="signup-form" action="{% url 'searchpage' %}" method="post">
+            {% csrf_token %}
+            {{ form.search_keyword }}
+            <input type="submit" value="Search" />
+          </form>
+          <br>
+        </div>
+			</div>
+		</nav>
+    <div class="col-sm-9" align="right">
+    {% if user and not user.is_anonymous %}
+      <a>Hello {{ user.get_full_name|default:user.username }}!</a>
+      <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a>
+    {% else %}
+      <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google+</a>
+    {% endif %}
+    </div>
+        <!-- Slider -->
+        <div class="slider-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1 slider">
+                        <div class="flexslider">
+                            <ul class="slides">
+                                {% for lecture in lectures %}
+                                  <li data-thumb="{{lecture.image_url}}">
+                                      <img src="{{lecture.image_url}}">
+                                        <div class="flex-caption">
+                                          <div class="portfolio-box">
+                                            <div class="portfolio-box-container portfolio-video" data-portfolio-big="/lecture_tree/{{lecture.id}}">
+                                              <div class="portfolio-box-text">
+                                          	    <h3>{{lecture.subject}}</h3>
+                                                <p style="Text-overflow:ellipsis;overflow:hidden; white-space:nowrap; text-transform:capitalize;">{{lecture.description}}</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                  </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Presentation -->
+        <div class="presentation-container">
+        	<div class="container">
+        		<div class="row">
+	        		<div class="col-sm-12 wow fadeInLeftBig">
+	            		<h1> <span class="violet">Sogang Open Courseware Portal</span></h1>
+
+	            	</div>
+            	</div>
+        	</div>
+        </div>
+
+        <!-- Services -->
+        <div class="services-container">
+	        <div class="container">
+	            <div class="row">
+	            	<div class="col-sm-3">
+		                <div class="service wow fadeInUp">
+		                    <div class="service-icon"><i class="fa fa-eye"></i></div>
+		                    <h3>Computer Science</h3>
+		                    <p> Computer Science 강의 모음입니다.</p>
+		                    <a class="big-link-1" href="services.html">Read more</a>
+		                </div>
+					</div>
+					<div class="col-sm-3">
+		                <div class="service wow fadeInUp">
+		                    <div class="service-icon"><i class="fa fa-table"></i></div>
+		                    <h3>고등 수학</h3>
+		                    <p>고등학교 과정 수학 강의 모음입니다</p>
+		                    <a class="big-link-1" href="services.html">Read more</a>
+		                </div>
+	                </div>
+	                <div class="col-sm-3">
+		                <div class="service wow fadeInUp">
+		                    <div class="service-icon"><i class="fa fa-magic"></i></div>
+		                    <h3>대학 교양</h3>
+		                    <p>다양한 주제에 대한 대학 수준 강의입니다 </p>
+		                    <a class="big-link-1" href="services.html">Read more</a>
+		                </div>
+	                </div>
+	                <div class="col-sm-3">
+		                <div class="service wow fadeInDown">
+		                    <div class="service-icon"><i class="fa fa-print"></i></div>
+		                    <h3>중등 영어</h3>
+		                    <p>중학교 수준의 영어 강의 모음입니다</p>
+		                    <a class="big-link-1" href="services.html">Read more</a>
+		                </div>
+	                </div>
+	            </div>
+	        </div>
+        </div>
+
+
+
+        <!-- Testimonials -->
+        <div class="testimonials-container">
+	        <div class="container">
+	        	<div class="row">
+		            <div class="col-sm-12 testimonials-title wow fadeIn">
+		                <h2>Testimonials</h2>
+		            </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-10 col-sm-offset-1 testimonial-list">
+	                	<div role="tabpanel">
+	                		<!-- Tab panes -->
+	                		<div class="tab-content">
+	                			<div role="tabpanel" class="tab-pane fade in active" id="tab1">
+	                				<div class="testimonial-image">
+	                					<img src="{% static "main/assets/img/testimonials/1.jpg" %}" alt="" data-at2x="{% static "main/assets/img/testimonials/1.jpg" %}">
+	                				</div>
+	                				<div class="testimonial-text">
+		                                <p>
+		                                	"찾고 싶은 강의 clip을 바로 찾아 볼 수 있다"<br>
+		                                	<a href="#">김구글, WowCom</a>
+		                                </p>
+	                                </div>
+	                			</div>
+	                			<div role="tabpanel" class="tab-pane fade" id="tab2">
+	                				<div class="testimonial-image">
+	                					<img src="{% static "main/assets/img/testimonials/2.jpg"  %}" alt="" data-at2x="{% static  "main/assets/img/testimonials/2.jpg" %}" >
+	                				</div>
+	                				<div class="testimonial-text">
+		                                <p>
+		                                	"회원 가입이 필요 없다"<br>
+		                                	<a href="#">홍길동, Hwalbindang</a>
+		                                </p>
+	                                </div>
+	                			</div>
+	                			<div role="tabpanel" class="tab-pane fade" id="tab3">
+	                				<div class="testimonial-image">
+	                					<img src="{% static "main/assets/img/testimonials/3.jpg"  %}" alt="" data-at2x="{% static  "main/assets/img/testimonials/3.jpg" %}" >
+	                				</div>
+	                				<div class="testimonial-text">
+		                                <p>
+		                                	"학습하고 싶은 주제에 대해서 검증된 좋은 강의를 비교해서 선택할 수 있었다"<br>
+		                                	<a href="#">최기석, 서강대학교</a>
+		                                </p>
+	                                </div>
+	                			</div>
+	                			<div role="tabpanel" class="tab-pane fade" id="tab4">
+	                				<div class="testimonial-image">
+	                						<img src="{% static "main/assets/img/testimonials/1.jpg" %}" alt="" data-at2x="{% static "main/assets/img/testimonials/1.jpg" %}">
+	                				</div>
+	                				<div class="testimonial-text">
+		                                <p>
+		                                	"공부하고 싶게끔 한다"<br>
+		                                	<a href="#">백수, NA</a>
+		                                </p>
+	                                </div>
+	                			</div>
+	                		</div>
+	                		<!-- Nav tabs -->
+	                		<ul class="nav nav-tabs" role="tablist">
+	                			<li role="presentation" class="active">
+	                				<a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab"></a>
+	                			</li>
+	                			<li role="presentation">
+	                				<a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab"></a>
+	                			</li>
+	                			<li role="presentation">
+	                				<a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab"></a>
+	                			</li>
+	                			<li role="presentation">
+	                				<a href="#tab4" aria-controls="tab4" role="tab" data-toggle="tab"></a>
+	                			</li>
+	                		</ul>
+	                	</div>
+	                </div>
+	            </div>
+	        </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 footer-box wow fadeInUp">
+                        <h4>About Us</h4>
+                        <div class="footer-box-text">
+	                        <p>
+	                        	누구일까요?
+	                        </p>
+	                        <p><a href="about.html">Read more...</a></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 footer-box wow fadeInDown">
+                        <h4>Email Updates</h4>
+                        <div class="footer-box-text footer-box-text-subscribe">
+                        	<p>Enter your email and you'll be one of the first to get new updates:</p>
+                        	<form role="form" action="{% static "main/assets/subscribe.php" %}" method="post">
+		                    	<div class="form-group">
+		                    		<label class="sr-only" for="subscribe-email">Email address</label>
+		                        	<input type="text" name="email" placeholder="Email..." class="subscribe-email" id="subscribe-email">
+		                        </div>
+		                        <button type="submit" class="btn">Subscribe</button>
+		                    </form>
+		                    <p class="success-message"></p>
+		                    <p class="error-message"></p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 footer-box wow fadeInDown">
+                        <h4>Contact Us</h4>
+                        <div class="footer-box-text footer-box-text-contact">
+	                        <p><i class="fa fa-map-marker"></i> Address: Sogang University, BaekBumRo, Mapo-GU, Seoul, Korea</p>
+	                        <p><i class="fa fa-phone"></i> Phone: 02-2323-3232</p>
+	                        <p><i class="fa fa-user"></i> Skype: Prof. Kim</p>
+	                        <p><i class="fa fa-envelope"></i> Email: <a href="">contact@sogang.ac.kr</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                	<div class="col-sm-12 wow fadeIn">
+                		<div class="footer-border"></div>
+                	</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-7 footer-copyright wow fadeIn">
+                        <p>This site is designed based on Andia Template by <a href="http://azmind.com">Azmind</a>.</p>
+                    </div>
+                    <div class="col-sm-5 footer-social wow fadeIn">
+                        <a href="#"><i class="fa fa-facebook"></i></a>
+                        <a href="#"><i class="fa fa-dribbble"></i></a>
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Javascript -->
+        <script src="{% static "main/assets/js/jquery-1.11.1.min.js" %}"></script>
+        <script src="{% static "main/assets/bootstrap/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "main/assets/js/bootstrap-hover-dropdown.min.js" %}"></script>
+        <script src="{% static "main/assets/js/jquery.backstretch.min.js" %}"></script>
+        <script src="{% static "main/assets/js/wow.min.js" %}"></script>
+        <script src="{% static "main/assets/js/retina-1.1.0.min.js" %}"></script>
+        <script src="{% static "main/assets/js/jquery.magnific-popup.min.js" %}"></script>
+        <script src="{% static "main/assets/flexslider/jquery.flexslider-min.js" %}"></script>
+        <script src="{% static "main/assets/js/jflickrfeed.min.js" %}"></script>
+        <script src="{% static "main/assets/js/masonry.pkgd.min.js" %}"></script>
+        <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <script src="{% static "main/assets/js/jquery.ui.map.min.js" %}"></script>
+        <script src="{% static "main/assets/js/scripts.js" %}"></script>
+
+    </body>
+
+</html>
