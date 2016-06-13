@@ -1,2 +1,2 @@
 # OCWPortal
-1. Need to Django
+1. This project was developed with the Django Framework
